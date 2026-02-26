@@ -5,10 +5,7 @@ st.set_page_config(
     page_icon="🏕️",
     layout="wide"
 )
-
-# =========================     
-# 🎨 CSS PERSONALIZADO
-# =========================
+git remote add origin
 st.markdown("""
 <style>
 
