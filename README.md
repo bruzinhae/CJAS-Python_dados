@@ -24,5 +24,5 @@ std: desvio padrão
 min: valor minimo 
 quartis de 25%, 50%, 75%
 max: Valor máximo
-- df.columns // para aparecer as colunas do csv (ver as informações que o usuário preencheu)
+- df.columns // para aparecer as colunas do csv (ver as informações que o usuário tem para preencher)
 - 
