@@ -1,4 +1,5 @@
-# streamlit run app.py // teste.py para o outro arquivo
+#Rode no terminal: 
+# streamlit run app.py // teste.py para rodar o outro arquivo
 
 import streamlit as st
 import pandas as pd
