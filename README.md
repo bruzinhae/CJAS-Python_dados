@@ -1,5 +1,14 @@
 # CJAS-Python_dados
 
+# CRONOGRAMA 
+
+Março - teste do App
+- De 1 a 15 de Abril  - pré inscrição e mídias 
+- 16 de Abril a 15 de junho - inscrições intensivas 
+- 16 de junho a 1 de agosto - ajustes finais e o povo que deixa pra ultima hora 
+- 1 de agosto a 30 de agosto - possivel lista de espera 
+- 1 Setembro a 9 de outubro corrida com logistica e programação com as informações ja fechadas
+
 códigos importantes 
 
 (para abrir no google collab)
@@ -15,5 +24,5 @@ std: desvio padrão
 min: valor minimo 
 quartis de 25%, 50%, 75%
 max: Valor máximo
-- df.columns // para aparecer as colunas do csv (ver as informações que o usuário preencheu
-- ``
+- df.columns // para aparecer as colunas do csv (ver as informações que o usuário preencheu)
+- 

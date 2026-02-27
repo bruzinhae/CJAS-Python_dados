@@ -1,11 +1,11 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Acampamento JAS 2026",
+    page_title="Acampamento CJAS 2026",
     page_icon="🏕️",
     layout="wide"
 )
-git remote add origin
+
 st.markdown("""
 <style>
 
@@ -74,17 +74,13 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# 🏕️ HERO SECTION
-# =========================
+
 st.markdown('<div class="main-title">🏕️ Acampamento JAS 2026</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Painel de Controle de Inscrições</div>', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# =========================
-# 🔢 MÉTRICAS (VISUAIS)
-# =========================
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -121,9 +117,7 @@ with col4:
 
 
 
-# =========================
-# 📊 SEÇÃO DE GRÁFICOS (VISUAL PLACEHOLDER)
-# =========================
+
 st.subheader("📊 Visão Geral")
 
 col5, col6 = st.columns(2)
@@ -131,7 +125,7 @@ col5, col6 = st.columns(2)
 with col5:
     st.markdown("""
     <div class="card">
-        <h4>Inscritos por Ala</h4>
+        <h4>Inscritos por Sessão</h4>
         <p>(Gráfico aparecerá aqui)</p>
     </div>
     """, unsafe_allow_html=True)
@@ -144,15 +138,15 @@ with col6:
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown("<br>")
+st.markdown("  ")
 
 col7, col8 = st.columns(2)
 
 with col7:
     st.markdown("""
     <div class="card">
-        <h4>Transporte</h4>
-        <p>(Ônibus / Próprio)</p>
+        <h4>Membros e não membros</h4>
+        <p>Gráfico aqui</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -166,27 +160,23 @@ with col8:
 
 st.markdown("---")
 
-# =========================
-# 📋 FILTROS LATERAIS (VISUAL)
-# =========================
+
 st.sidebar.header("🔍 Filtros")
 
-st.sidebar.multiselect("Ala", ["Ala Centro", "Ala Norte", "Ala Sul"])
+st.sidebar.multiselect("Sessão", ["Campinas", "São Paulo Norte", "São Paulo Sul"])
 st.sidebar.selectbox("Sexo", ["Masculino", "Feminino"])
 st.sidebar.selectbox("Pagamento", ["Pago", "Pendente", "Parcial"])
 st.sidebar.checkbox("Somente com restrição alimentar")
 st.sidebar.checkbox("Somente quem vai de ônibus")
 
-# =========================
-# 📑 TABELA (PLACEHOLDER)
-# =========================
+
 st.subheader("📑 Lista de Inscritos")
 
 st.dataframe(
     {
         "Nome": ["João Silva", "Maria Souza", "Lucas Almeida"],
         "Idade": [18, 19, 20],
-        "Ala": ["Centro", "Norte", "Sul"],
+        "Sessão": ["Campinas", "São Paulo Norte", "São Paulo Sul"],
         "Pagamento": ["Pago", "Pendente", "Pago"],
         "Transporte": ["Ônibus", "Próprio", "Ônibus"]
     }
@@ -195,6 +185,6 @@ st.dataframe(
 st.markdown("""
 <hr style="border: 1px solid rgba(255,255,255,0.2)">
 <center>
-Sistema interno • Organização do Acampamento JAS 2026 🌲
+Sistema interno • Acampamento CJAS 2026 🌲
 </center>
 """, unsafe_allow_html=True)
