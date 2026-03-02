@@ -82,3 +82,17 @@ gabs pediu para vermos uma forma de quando as pessoas passarem pela atividade el
 
 # ATENÇÃO!! 
 Temos que nos lembrar que as sessões de belém vão ser em outro dia!!! - lembrar para o sistema 
+
+
+# Conselho para cuidarmos 
+
+Emma: Norte e centro oeste 
+Bruna: Nordeste e sudeste
+Israel: Sul 
+
+4 pilares: 
+Convenio 
+servico
+Obra missionária
+Família 
+
