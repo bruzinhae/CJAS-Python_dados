@@ -101,7 +101,11 @@ div.stButton > button:hover {
 """, unsafe_allow_html=True)
 
 # --- Carregamento dos dados ---
-df = pd.read_csv("inscricoes_acampamento.csv")
+@st.cache_data
+def carregar_dados():
+    return pd.read_csv("inscricoes_acampamento.csv")
+
+df = carregar_dados()
 
 df['id_de_membro'] = pd.to_numeric(df['id_de_membro'], errors='coerce')
 df['membro'] = df['id_de_membro'].apply(
