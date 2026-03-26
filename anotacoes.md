@@ -11,12 +11,6 @@ Março - teste do App
 - 1 Setembro a 4 de outubro - corrida com logistica e programação com as informações ja fechadas
 
 
-
-
-
-
-
-
 # CÓDIGOS NO GOOGLE COLAB
 
 
@@ -38,3 +32,37 @@ quartis de 25%, 50%, 75%
 max: Valor máximo
 - df.columns  // para aparecer as colunas do csv (ver as informações que o usuário tem para preencher)
 - 
+
+
+# Para a próxima reunião: 
+
+*To Do:*
+
+- Verificar todos os líderes regionais com a Michele (parece que tá faltando alguns 😅)
+- ⁠Terminar de adicionar os líderes regionais nos grupos de TI regionais
+
+
+*Treinamento do App Come Together*
+
+• Treinar todos os comitês de TI via zoom
+          • ⁠O que é o comitê de TI? Qual o nosso papel? 
+          • Explicar o processo de inscrição & App Come Together
+
+• Treinamento por Região para tirar dúvidas 
+
+• ⁠Passo a Passo para:
+         • ⁠Administradores 
+         • Presidente de Estaca
+         • Bispos
+         • Jovens
+   _(Decidir quando enviar)_
+
+• Live Cara a Cara para animar todo mundoooo 🥳 e tirar dúvidas
+
+*Ideias:*
+• Usar as conexões que temos para gravar um vídeo
+
+*Calendário:*
+• Como vai ficar o novo calendário? 
+• ⁠Esperamos ter o aplicativo até 1° de abril 
+• ⁠Em quanto tempo gravamos, editamos, e enviamos tudo?
