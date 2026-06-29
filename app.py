@@ -1,244 +1,548 @@
-#Rode no terminal: 
-# streamlit run app.py // teste.py para rodar o outro arquivo
+# Rode no terminal:
+# streamlit run dashboard.py
 
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # --- Configuração da Página ---
 st.set_page_config(
-    page_title="Inscrições",
+    page_title="Inscrições · Acampamento",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 st.markdown("""
 <style>
 
-/* ---------- FUNDO GERAL ---------- */
+/* ========== RESET & BASE ========== */
+* { box-sizing: border-box; }
+
 .stApp {
-    background: linear-gradient(180deg, #1b4332, #2d6a4f, #40916c);
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #0F1117;
+    color: #E8EAF0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* ---------- SIDEBAR ---------- */
+/* ========== SIDEBAR ========== */
 section[data-testid="stSidebar"] {
-    background-color: #081c15;
+    background-color: #16181F !important;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    padding-top: 0 !important;
 }
 
-/* ---------- MULTISELECT ---------- */
+section[data-testid="stSidebar"] > div {
+    padding-top: 0 !important;
+}
 
-/* caixa */
+/* ========== SIDEBAR BRAND ========== */
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 20px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 16px;
+}
+
+.brand-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #6C63FF, #9B59B6);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+}
+
+/* ========== NAV ITEMS ========== */
+.nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 8px 20px 4px 20px;
+    margin-top: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 8px;
+    margin: 2px 12px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    transition: all 0.2s;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.85);
+}
+
+.nav-item.active {
+    background: rgba(108, 99, 255, 0.15);
+    color: #A89EFF;
+    font-weight: 600;
+}
+
+.nav-item .nav-icon {
+    font-size: 15px;
+    width: 18px;
+    text-align: center;
+}
+
+/* ========== SIDEBAR DIVIDER ========== */
+.sidebar-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 12px 20px;
+}
+
+/* ========== FILTER LABEL ========== */
+.stSidebar .stMultiSelect label,
+.stSidebar .stSlider label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: rgba(255,255,255,0.45) !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+}
+
+/* ========== MULTISELECT ========== */
 div[data-baseweb="select"] > div {
-    background-color: #1b4332 !important;
-    color: white !important;
-    border: 1px solid #95d5b2 !important;
+    background-color: #1E2028 !important;
+    color: #E8EAF0 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 8px !important;
 }
 
-/* tag selecionada */
 span[data-baseweb="tag"] {
-    background-color: #74c69d !important;
-    color: #081c15 !important;
+    background-color: rgba(108,99,255,0.25) !important;
+    color: #A89EFF !important;
+    border-radius: 4px !important;
 }
 
-/* remove foco vermelho geral */
 *:focus {
     outline: none !important;
-    box-shadow: 0 0 0 2px #95d5b2 !important;
+    box-shadow: 0 0 0 2px rgba(108,99,255,0.4) !important;
 }
 
-/* ---------- BOTÕES ---------- */
-div.stButton > button {
-    background-color: #d8f3dc;
-    color: #081c15;
-    border-radius: 25px;
-    border: none;
-    font-weight: bold;
+/* ========== SLIDER ========== */
+.stSlider > div > div {
+    color: #A89EFF !important;
 }
 
-div.stButton > button:hover {
-    background-color: #b7e4c7;
+.stSlider div[role="slider"] {
+    background-color: #6C63FF !important;
+    border: 2px solid #0F1117 !important;
 }
 
-/* ---------- CARDS ---------- */
-.card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    padding: 25px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.15);
-    text-align: center;
-    transition: 0.3s ease;
+/* ========== PAGE HEADER ========== */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
 }
 
-.card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 20px rgba(255,255,255,0.25);
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.3px;
 }
 
-.big-number {
-    font-size: 36px;
-    font-weight: bold;
+.page-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+}
+
+.date-badge {
+    background: #1E2028;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+}
+
+/* ========== METRIC CARDS ========== */
+.metric-card {
+    background: #16181F;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.metric-card:hover {
+    border-color: rgba(108,99,255,0.3);
+    box-shadow: 0 4px 24px rgba(108,99,255,0.08);
+}
+
+.metric-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    margin-bottom: 14px;
+}
+
+.metric-card-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    margin-bottom: 6px;
+}
+
+.metric-card-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.metric-card-sub {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 6px;
+}
+
+.metric-accent {
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    border-radius: 0 14px 0 80px;
+    opacity: 0.06;
+}
+
+/* ========== CHART CARDS ========== */
+.chart-card {
+    background: #16181F;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px 22px 8px 22px;
+    margin-bottom: 16px;
+}
+
+.chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 2px;
+}
+
+.chart-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
     margin-bottom: 8px;
+}
+
+/* ========== TABLE ========== */
+.stDataFrame {
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+}
+
+.stDataFrame thead tr th {
+    background-color: #1E2028 !important;
+    color: rgba(255,255,255,0.4) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+}
+
+.stDataFrame tbody tr:hover td {
+    background-color: rgba(108,99,255,0.05) !important;
+}
+
+/* ========== DIVIDER ========== */
+hr {
+    border-color: rgba(255,255,255,0.06) !important;
+    margin: 24px 0 !important;
+}
+
+/* ========== SECTION LABEL ========== */
+.section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 12px;
+    margin-top: 4px;
+}
+
+/* ========== STATUS PILL ========== */
+.pill-membro {
+    display: inline-block;
+    background: rgba(108,99,255,0.18);
+    color: #A89EFF;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.pill-nao-membro {
+    display: inline-block;
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.45);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# --- Carregamento dos dados ---
-df = pd.read_csv("inscricoes_acampamento.csv")
+
+# ─────────────────────────────────────────────
+# DADOS
+# ─────────────────────────────────────────────
+@st.cache_data
+def carregar_dados():
+    return pd.read_csv("inscricoes_acampamento.csv")
+
+df = carregar_dados()
 
 df['id_de_membro'] = pd.to_numeric(df['id_de_membro'], errors='coerce')
 df['membro'] = df['id_de_membro'].apply(
     lambda x: "Membro" if pd.notna(x) else "Não Membro"
 )
 
-# --- Sidebar ---
-st.sidebar.header("🔍 Filtros")
 
-sessoes_disponiveis = sorted(df['sessao'].unique())
-sessoes_selecionadas = st.sidebar.multiselect(
-    "Sessão",
-    sessoes_disponiveis,
-    default=sessoes_disponiveis
-)
+# ─────────────────────────────────────────────
+# SIDEBAR
+# ─────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("""
+    <div class="brand-block">
+        <div class="brand-icon">⛺</div>
+        <div class="brand-name">Acampamento</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-tipo_participante = st.sidebar.multiselect(
-    "Tipo",
-    df['membro'].unique(),
-    default=df['membro'].unique()
-)
+    st.markdown("""
+    <div class="nav-section-label">Menu</div>
+    <div class="nav-item active"><span class="nav-icon">📊</span> Inscrições</div>
+    <div class="nav-item"><span class="nav-icon">👥</span> Participantes</div>
+    <div class="nav-item"><span class="nav-icon">🗓️</span> Sessões</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Relatórios</div>
+    <hr class="sidebar-divider">
+    <div class="nav-section-label">Conta</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="nav-item"><span class="nav-icon">🚪</span> Sair</div>
+    <hr class="sidebar-divider">
+    <div class="nav-section-label" style="margin-top:16px;">Filtros</div>
+    """, unsafe_allow_html=True)
 
-idade_min = st.sidebar.slider(
-    "Idade mínima",
-    int(df['idade'].min()),
-    int(df['idade'].max()),
-    12
-)
+    sessoes_disponiveis = sorted(df['sessao'].unique())
+    sessoes_selecionadas = st.multiselect(
+        "Sessão",
+        sessoes_disponiveis,
+        default=sessoes_disponiveis
+    )
 
-# --- Filtragem ---
-df_filtrado = df[
+    tipo_participante = st.multiselect(
+        "Tipo",
+        df['membro'].unique(),
+        default=df['membro'].unique()
+    )
+
+    idade_min = st.slider(
+        "Idade mínima",
+        int(df['idade'].min()),
+        int(df['idade'].max()),
+        12
+    )
+
+
+# ─────────────────────────────────────────────
+# FILTRAGEM
+# ─────────────────────────────────────────────
+df_f = df[
     (df['sessao'].isin(sessoes_selecionadas)) &
     (df['membro'].isin(tipo_participante)) &
     (df['idade'] >= idade_min)
 ]
 
-# --- Título ---
-st.markdown("<h1 style='text-align:center;'> Inscrições</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; opacity:0.8;'>Análise geral dos participantes do acampamento</p>", unsafe_allow_html=True)
+total      = df_f.shape[0]
+media_idade = df_f['idade'].mean() if not df_f.empty else 0
+maior_idade = df_f['idade'].max()  if not df_f.empty else 0
+nao_membros = df_f[df_f['membro'] == "Não Membro"].shape[0]
+membros     = df_f[df_f['membro'] == "Membro"].shape[0]
+pct_membros = (membros / total * 100) if total > 0 else 0
 
-# --- Métricas ---
-if not df_filtrado.empty:
-    total_inscritos = df_filtrado.shape[0]
-    media_idade = df_filtrado['idade'].mean()
-    maior_idade = df_filtrado['idade'].max()
-    nao_membros = df_filtrado[df_filtrado['membro'] == "Não Membro"].shape[0]
-else:
-    total_inscritos = media_idade = maior_idade = nao_membros = 0
 
-col1, col2, col3, col4 = st.columns(4)
+# ─────────────────────────────────────────────
+# CONTEÚDO PRINCIPAL
+# ─────────────────────────────────────────────
 
-with col1:
-    st.markdown(f"""
-    <div class="card">
-        <div class="big-number">{total_inscritos}</div>
-        Total de Inscritos
+# Header
+st.markdown(f"""
+<div class="page-header">
+    <div>
+        <div class="page-title">Inscrições</div>
+        <div class="page-subtitle">Análise geral dos participantes do acampamento</div>
     </div>
-    """, unsafe_allow_html=True)
+    <div class="date-badge">📅 Temporada 2025</div>
+</div>
+""", unsafe_allow_html=True)
 
-with col2:
-    st.markdown(f"""
-    <div class="card">
-        <div class="big-number">{media_idade:.1f}</div>
-        Idade Média
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("<div style='margin-bottom:20px'></div>", unsafe_allow_html=True)
 
-with col3:
-    st.markdown(f"""
-    <div class="card">
-        <div class="big-number">{maior_idade}</div>
-        Maior Idade
-    </div>
-    """, unsafe_allow_html=True)
+# ── Métricas ──
+c1, c2, c3, c4 = st.columns(4)
 
-with col4:
-    st.markdown(f"""
-    <div class="card">
-        <div class="big-number">{nao_membros}</div>
-        Não Membros
-    </div>
-    """, unsafe_allow_html=True)
+cards = [
+    (c1, "👤", "#6C63FF", "Total de Inscritos", total,          "participantes no filtro atual"),
+    (c2, "🎂", "#F59E0B", "Idade Média",         f"{media_idade:.1f}", "anos"),
+    (c3, "📈", "#10B981", "Maior Idade",          maior_idade,   "anos registrados"),
+    (c4, "🆕", "#EF4444", "Não Membros",          nao_membros,   f"{100-pct_membros:.0f}% do total"),
+]
 
-st.markdown("<br>", unsafe_allow_html=True)
+for col, icon, color, label, value, sub in cards:
+    with col:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-accent" style="background:{color};"></div>
+            <div class="metric-card-icon" style="background:{color}22; color:{color};">{icon}</div>
+            <div class="metric-card-label">{label}</div>
+            <div class="metric-card-value">{value}</div>
+            <div class="metric-card-sub">{sub}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-# --- Paleta Harmonizada ---
-cores = {
-    "Membro": "#95d5b2",
-    "Não Membro": "#fefae0"
+st.markdown("<div style='margin-bottom:20px'></div>", unsafe_allow_html=True)
+
+# ── Paleta ──
+CORES = {
+    "Membro":     "#6C63FF",
+    "Não Membro": "#3D4455",
 }
+PLOTLY_LAYOUT = dict(
+    plot_bgcolor  = "rgba(0,0,0,0)",
+    paper_bgcolor = "rgba(0,0,0,0)",
+    font_color    = "rgba(255,255,255,0.6)",
+    font_size     = 12,
+    margin        = dict(t=10, b=10, l=10, r=10),
+    legend        = dict(
+        bgcolor     = "rgba(0,0,0,0)",
+        bordercolor = "rgba(255,255,255,0.06)",
+        borderwidth = 1,
+    ),
+)
 
-# --- Gráficos ---
-col_graf1, col_graf2 = st.columns(2)
+# ── Gráficos linha 1 ──
+col_g1, col_g2 = st.columns([3, 2])
 
-with col_graf1:
-    if not df_filtrado.empty:
-        grafico_sessao = px.histogram(
-            df_filtrado,
-            x='sessao',
-            color='membro',
+with col_g1:
+    st.markdown('<div class="chart-card">', unsafe_allow_html=True)
+    st.markdown('<div class="chart-title">Distribuição por Sessão</div>', unsafe_allow_html=True)
+    st.markdown('<div class="chart-sub">Inscritos agrupados por sessão e tipo de participante</div>', unsafe_allow_html=True)
+
+    if not df_f.empty:
+        fig = px.histogram(
+            df_f, x='sessao', color='membro',
             barmode='group',
-            title="Distribuição por Sessão",
-            color_discrete_map=cores
+            color_discrete_map=CORES,
+            labels={'sessao': 'Sessão', 'membro': '', 'count': 'Qtd'},
         )
-        grafico_sessao.update_layout(
-            plot_bgcolor="rgba(0,0,0,0)",
-            paper_bgcolor="rgba(0,0,0,0)",
-            font_color="white"
-        )
-        st.plotly_chart(grafico_sessao, use_container_width=True)
+        fig.update_traces(marker_line_width=0)
+        fig.update_layout(**PLOTLY_LAYOUT, height=260,
+                          xaxis=dict(showgrid=False),
+                          yaxis=dict(gridcolor="rgba(255,255,255,0.05)"))
+        st.plotly_chart(fig, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-with col_graf2:
-    if not df_filtrado.empty:
-        grafico_idade = px.histogram(
-            df_filtrado,
-            x='idade',
-            nbins=20,
-            title="Distribuição de Idade",
-            color_discrete_sequence=["#74c69d"]
-        )
-        grafico_idade.update_layout(
-            plot_bgcolor="rgba(0,0,0,0)",
-            paper_bgcolor="rgba(0,0,0,0)",
-            font_color="white"
-        )
-        st.plotly_chart(grafico_idade, use_container_width=True)
+with col_g2:
+    st.markdown('<div class="chart-card">', unsafe_allow_html=True)
+    st.markdown('<div class="chart-title">Membros vs Não Membros</div>', unsafe_allow_html=True)
+    st.markdown('<div class="chart-sub">Proporção por tipo de participante</div>', unsafe_allow_html=True)
 
-# --- Pizza ---
-if not df_filtrado.empty:
-    contagem_membros = df_filtrado['membro'].value_counts().reset_index()
-    contagem_membros.columns = ['tipo', 'quantidade']
+    if not df_f.empty:
+        contagem = df_f['membro'].value_counts().reset_index()
+        contagem.columns = ['tipo', 'quantidade']
 
-    grafico_pizza = px.pie(
-        contagem_membros,
-        names='tipo',
-        values='quantidade',
-        hole=0.5,
-        title="Proporção Membros vs Não Membros",
-        color='tipo',
-        color_discrete_map=cores
+        fig2 = px.pie(
+            contagem, names='tipo', values='quantidade',
+            hole=0.62,
+            color='tipo',
+            color_discrete_map=CORES,
+        )
+        fig2.update_traces(
+            textinfo='percent',
+            textfont_size=13,
+            marker=dict(line=dict(color="#0F1117", width=2))
+        )
+        fig2.update_layout(**PLOTLY_LAYOUT, height=260,
+                           showlegend=True,
+                           legend=dict(orientation="h", y=-0.1))
+        # Anotação central
+        fig2.add_annotation(
+            text=f"<b>{total}</b><br><span style='font-size:10px'>total</span>",
+            x=0.5, y=0.5, showarrow=False,
+            font=dict(size=18, color="#FFFFFF"),
+            align="center",
+        )
+        st.plotly_chart(fig2, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ── Gráfico linha 2: Distribuição de Idades ──
+st.markdown('<div class="chart-card">', unsafe_allow_html=True)
+st.markdown('<div class="chart-title">Distribuição de Idades</div>', unsafe_allow_html=True)
+st.markdown('<div class="chart-sub">Frequência de participantes por faixa etária</div>', unsafe_allow_html=True)
+
+if not df_f.empty:
+    fig3 = px.histogram(
+        df_f, x='idade', nbins=20,
+        color_discrete_sequence=["#6C63FF"],
+        labels={'idade': 'Idade', 'count': 'Qtd'},
     )
+    fig3.update_traces(marker_line_width=0, opacity=0.85)
+    fig3.update_layout(**PLOTLY_LAYOUT, height=220,
+                       xaxis=dict(showgrid=False, dtick=1),
+                       yaxis=dict(gridcolor="rgba(255,255,255,0.05)"))
+    st.plotly_chart(fig3, use_container_width=True)
 
-    grafico_pizza.update_layout(
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        font_color="white"
-    )
+st.markdown('</div>', unsafe_allow_html=True)
 
-    st.plotly_chart(grafico_pizza, use_container_width=True)
+# ── Tabela ──
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown('<div class="section-label">Lista de Inscritos</div>', unsafe_allow_html=True)
 
-st.markdown("---")
-
-# --- Tabela ---
-st.subheader("📋 Lista de Inscritos")
-st.dataframe(df_filtrado)
+st.dataframe(
+    df_f,
+    use_container_width=True,
+    hide_index=True,
+    height=320,
+)
