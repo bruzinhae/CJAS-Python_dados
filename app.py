@@ -854,10 +854,10 @@ elif st.session_state.pagina_atual == "Participantes":
     with hc2:
         st.markdown("""
         <div class="header-right" style="justify-content:flex-end; margin-top:6px;">
-            <div class="date-pill">📅 Temporada 2026</div>
+            <div class="date-pill">2026</div>
             <div class="avatar-group">
-                <div class="avatar-circle">AC</div>
-                <span class="avatar-name">Acampamento</span>
+                <div class="avatar-circle">P</div>
+                <span class="avatar-name">Participantes</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
